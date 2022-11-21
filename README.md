@@ -1,0 +1,1 @@
+# bicep-customscript-win-with-privatestorage
