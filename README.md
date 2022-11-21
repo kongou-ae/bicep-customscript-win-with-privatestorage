@@ -7,7 +7,8 @@ This bicep will run the following steps
 1. Create a storage account
 1. Upload a simple powershell script to this storage account
 1. Disable a public internet access on this storage account
-1. Create other IaaS environment
+1. Create other IaaS environment(VNet, Private Endpoint, Private DNS zone, Virtual Machine etc)
+1. Depoloy a custom script extension to a VM 
 
 # Usage
 
