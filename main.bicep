@@ -12,6 +12,7 @@ resource customStorage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
     name: 'Standard_LRS'
   }
   properties: {
+     allowBlobPublicAccess: false
   }
   resource blobServices 'blobServices' = {
     name: 'default'
@@ -20,7 +21,6 @@ resource customStorage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
     resource container 'containers' = {
       name: 'customscript'
       properties: {
-         publicAccess: 'Blob'
       }
     }
   }
@@ -184,16 +184,6 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-05-01' = {
     subnet: {
       id: '${vnet.id}/subnets/storagePe'
     }
-    ipConfigurations: [
-      {
-        name: 'ipconfig1'
-        properties: {
-          groupId: 'blob'
-          memberName: 'blob'
-          privateIPAddress: '10.0.2.4'
-        }
-      }
-    ]
     customNetworkInterfaceName: 'custom-je-pe-nic'
     privateLinkServiceConnections: [
       {
@@ -325,7 +315,9 @@ resource customScript 'Microsoft.Compute/virtualMachines/extensions@2022-08-01' 
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.7'
     autoUpgradeMinorVersion: true
-    settings: {
+    protectedSettings:{
+      storageAccountName: customStorage.name
+      storageAccountKey: customStorage.listKeys().keys[0].value
       fileUris: [
         '${customStorage.properties.primaryEndpoints.blob}customscript/customScript.ps1'
       ]
